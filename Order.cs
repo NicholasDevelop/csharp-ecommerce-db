@@ -16,6 +16,6 @@ internal class Order
     public int Customer_id { get; set; }
     public DateOnly Date { get; set; }
     public double Amount { get; set; }
-    public bool status { get; set; }
-    public List<Order_Product> Orders_Products { get; set; }
+    public string status { get; set; }
+    public List<Product> Products { get; set; }
 }
