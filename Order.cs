@@ -16,7 +16,7 @@ internal class Order
     public DateTime Date { get; set; }
 
     [Column(TypeName = "decimal(5, 2)")]
-    public double Amount { get; set; }
+    public decimal Amount { get; set; }
     public string status { get; set; }
 
     [Column("customer_id")]

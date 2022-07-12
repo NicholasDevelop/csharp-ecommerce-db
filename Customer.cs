@@ -18,5 +18,16 @@ internal class Customer
     public string Email { get; set; }
 
     public List<Order> Orders { get; set; }
+
+
+    public static void Create(string name, string surname, string email)
+    {
+        using (EcommerceContext context = new EcommerceContext())
+        {
+            Customer customer = new Customer { Name = name, Surname = surname, Email = email };
+            context.Add(customer);
+            context.SaveChanges();
+        }
+    }
 }
 

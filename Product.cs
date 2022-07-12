@@ -17,7 +17,18 @@ internal class Product
 
     [Required]
     [Column(TypeName = "decimal(5, 2)")]
-    public double Price { get; set; }
+    public decimal Price { get; set; }
     public List<Order> Orders { get; set; }
     public List<OrderProduct> OrderProducts { get; set; }
+
+
+    public static void Create(string name, string description, decimal price)
+    {
+        using(EcommerceContext context = new EcommerceContext())
+        {
+            Product product = new Product { Name = name, Description = description, Price = price };
+            context.Add(product);
+            context.SaveChanges();
+        }
+    }
 }
