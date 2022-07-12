@@ -6,10 +6,17 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace csharp_ecommerce_db
-{
-    internal class Customer
-    {
+[Table("customer")]
 
-    }
+internal class Customer
+{
+    [Key]
+    public int Id { get; set; }
+    [Required]
+    public string Name { get; set; }
+    public string Surname { get; set; }
+    public string Email { get; set; }
+
+    public List<Order> Orders { get; set; }
 }
+
