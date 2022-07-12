@@ -14,6 +14,10 @@ internal class Product
     [Required]
     public string Name { get; set; }
     public string Description { get; set; }
+
+    [Required]
+    [Column(TypeName = "decimal(5, 2)")]
     public double Price { get; set; }
     public List<Order> Orders { get; set; }
+    public List<OrderProduct> OrderProducts { get; set; }
 }

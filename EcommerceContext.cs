@@ -1,22 +1,40 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
-namespace csharp_ecommerce_db
+
+internal class EcommerceContext : DbContext
 {
-    internal class EcommerceContext : DbContext
+    public DbSet<Customer> Customers { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Product> Products { get; set; }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<Order_Product> Orders_Products { get; set; }
-        public DbSet<Product> Products { get; set; }
+        modelBuilder.Entity<Order>()
+            .HasMany(p => p.Products)
+            .WithMany(p => p.Orders)
+            .UsingEntity<OrderProduct>(
+                j => j
+                    .HasOne(pt => pt.Product)
+                    .WithMany(t => t.OrderProducts)
+                    .HasForeignKey(pt => pt.ProductId),
+                j => j
+                    .HasOne(pt => pt.Order)
+                    .WithMany(p => p.OrderProducts)
+                    .HasForeignKey(pt => pt.OrderId),
+                j =>
+                {
+                    j.Property(pt => pt.Quantity);
+                    j.HasKey(t => new { t.OrderId, t.ProductId });
+                });
+    }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=db_ecommerce;Integrated Security=True");
-        }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=db_ecommerce;Integrated Security=True");
     }
 }
+
