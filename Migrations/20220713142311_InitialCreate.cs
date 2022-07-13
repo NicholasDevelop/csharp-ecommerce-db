@@ -13,15 +13,15 @@ namespace csharp_ecommerce_db.Migrations
                 name: "customer",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    CustomerID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerSurname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    customer_email = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_customer", x => x.Id);
+                    table.PrimaryKey("PK_customer", x => x.CustomerID);
                 });
 
             migrationBuilder.CreateTable(
@@ -32,7 +32,7 @@ namespace csharp_ecommerce_db.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(5,2)", nullable: false)
+                    Price = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,64 +43,71 @@ namespace csharp_ecommerce_db.Migrations
                 name: "order",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    OrderID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
-                    status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    customer_id = table.Column<int>(type: "int", nullable: false)
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    CustomerID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_order", x => x.Id);
+                    table.PrimaryKey("PK_order", x => x.OrderID);
                     table.ForeignKey(
-                        name: "FK_order_customer_customer_id",
-                        column: x => x.customer_id,
+                        name: "FK_order_customer_CustomerID",
+                        column: x => x.CustomerID,
                         principalTable: "customer",
-                        principalColumn: "Id",
+                        principalColumn: "CustomerID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderProduct",
+                name: "order_product",
                 columns: table => new
                 {
-                    OrderId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
+                    OrderProductID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    OrderID = table.Column<int>(type: "int", nullable: false),
+                    ProductID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderProduct", x => new { x.OrderId, x.ProductId });
+                    table.PrimaryKey("PK_order_product", x => x.OrderProductID);
                     table.ForeignKey(
-                        name: "FK_OrderProduct_order_OrderId",
-                        column: x => x.OrderId,
+                        name: "FK_order_product_order_OrderID",
+                        column: x => x.OrderID,
                         principalTable: "order",
-                        principalColumn: "Id",
+                        principalColumn: "OrderID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderProduct_product_ProductId",
-                        column: x => x.ProductId,
+                        name: "FK_order_product_product_ProductID",
+                        column: x => x.ProductID,
                         principalTable: "product",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_order_customer_id",
+                name: "IX_order_CustomerID",
                 table: "order",
-                column: "customer_id");
+                column: "CustomerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderProduct_ProductId",
-                table: "OrderProduct",
-                column: "ProductId");
+                name: "IX_order_product_OrderID",
+                table: "order_product",
+                column: "OrderID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_order_product_ProductID",
+                table: "order_product",
+                column: "ProductID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "OrderProduct");
+                name: "order_product");
 
             migrationBuilder.DropTable(
                 name: "order");

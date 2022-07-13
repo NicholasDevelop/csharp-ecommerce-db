@@ -1,27 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 [Table("order")]
-internal class Order
+public class Order
 {
     [Key]
-    public int Id { get; set; }
-    [Required]
+    public int OrderID { get; set; }
+
     public DateTime Date { get; set; }
 
-    [Column(TypeName = "decimal(5, 2)")]
-    public decimal Amount { get; set; }
-    public string status { get; set; }
+    public double Amount { get; set; }
 
-    [Column("customer_id")]
-    public int CustomerId { get; set; }
+    public bool Status { get; set; }
+
+    [Required]
+    public int CustomerID { get; set; }
     public Customer Customer { get; set; }
-    public List<Product> Products { get; set; }
-    public List<OrderProduct> OrderProducts { get; set; }
+
+    public List<OrderProduct> OrdersProducts { get; set; }
+
+
+    public Order(Customer customer, List<Product> products)
+    {
+        this.Customer = customer;
+        this.CustomerID = customer.CustomerID;
+        this.Status = true;
+        foreach (Product product in products)
+        {
+            this.Amount += product.Price;
+        }
+    }
+
+    public Order()
+    {
+
+    }
 }

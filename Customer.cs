@@ -1,33 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 [Table("customer")]
-
-internal class Customer
+public class Customer
 {
     [Key]
-    public int Id { get; set; }
-    [Required]
-    public string Name { get; set; }
-    public string Surname { get; set; }
+    public int CustomerID { get; set; }
+
+    public string CustomerName { get; set; }
+
+    public string CustomerSurname { get; set; }
+
+    [Column("customer_email")]
     public string Email { get; set; }
 
-    public List<Order> Orders { get; set; }
+    public List<Order> Order { get; set; }
 
-
-    public static void Create(string name, string surname, string email)
+    public Customer(string customerName, string customerSurname, string email)
     {
-        using (EcommerceContext context = new EcommerceContext())
-        {
-            Customer customer = new Customer { Name = name, Surname = surname, Email = email };
-            context.Add(customer);
-            context.SaveChanges();
-        }
+        this.CustomerName = customerName;
+        this.CustomerSurname = customerSurname;
+        this.Email = email;
     }
-}
 
+}
