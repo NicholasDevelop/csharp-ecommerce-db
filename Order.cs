@@ -40,4 +40,12 @@ public class Order
     {
 
     }
+
+    public void AddProducts(List<Product> products)
+    {
+        foreach (Product product in products)
+        {
+            this.Amount += product.Price;
+        }
+    }
 }

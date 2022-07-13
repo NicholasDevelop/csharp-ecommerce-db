@@ -26,7 +26,22 @@ switch (menuInput)
 {
     case 1:
         Console.WriteLine("**** MENU AGGIUNGI PRODOTTO ****");
+        using (EcommerceContext db = new EcommerceContext())
+        {
+            Console.WriteLine("Inserire nome prodotto: ");
+            string productName = Console.ReadLine();
 
+            Console.WriteLine("Inserire descrizione prodotto: ");
+            string productDescription = Console.ReadLine();
+
+            Console.WriteLine("Inserire prezzo prodotto in euro: ");
+            double productPrice = double.Parse(Console.ReadLine());
+
+            Product newProduct = new Product(productName, productDescription, productPrice);
+
+            db.Add(newProduct);
+            db.SaveChanges();
+        }
         break;
     case 0:
         return;
